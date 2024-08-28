@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ******************************************************************************* * COPYRIGHT Ericsson LMI 2023. All rights reserved. * * No part of this document
+may be reproduced in any form without the * written permission of the copyright owner.The contents of this document * are subject to revision without notice due
+to continued progress in * methodology, design and manufacturing. Ericsson shall have no liability * for any error or damage of any kind resulting from the use of
+this document. * ******************************************************************************* -->
+<flow:FlowDefinition oss_common:lifeCycle="CURRENT"
+                     oss_common:name="NormalizeMirroredTransportDataFlow" oss_common:ns="FH6000_MED"
+                     oss_common:version="1.0.1" synchronicity="SYNCHRONOUS"
+                     xmlns:flow="urn:com:ericsson:schema:xml:oss:fbp_flow"
+                     xmlns:oss_common="urn:com:ericsson:schema:xml:oss:oss_common"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <oss_common:modelCreationInfo author="Blackbox" creationDate="16/02/2023">
+        <oss_common:designedModel componentId="fronthaul6000-transportcim-mediation-flow-model"/>
+    </oss_common:modelCreationInfo>
+
+    <oss_common:desc>TCIM Flow model for fronthaul6000 nodes</oss_common:desc>
+    <flow:input name="NormalizeMirroredTransportDataFlowInput">
+    </flow:input>
+
+    <flow:step name="TransportCimSetupNormalizationHandler">
+        <flow:handlerTypeRef uri="model://TCIM_MED/TransportCimSetupNormalizationHandler/1.0.0"/>
+        <flow:attribute name="rootNormalizationType" value="ManagedElement"/>
+        <flow:attribute name="isComplexNormalizationPluginDefined" value="true"/>
+    </flow:step>
+
+    <flow:step name="TransportCimNormalizeMirroredTransportDataHandler">
+        <flow:handlerTypeRef uri="model://TCIM_MED/TransportCimNormalizeMirroredTransportDataHandler/1.0.0"/>
+    </flow:step>
+
+    <flow:step name="UpdateNormalizedDataInCimHandler">
+        <flow:handlerTypeRef uri="model://TCIM_MED/UpdateNormalizedDataInCimHandler/1.0.0"/>
+    </flow:step>
+
+    <flow:step name="FinalizeNormalizationHandler">
+        <flow:handlerTypeRef uri="model://TCIM_MED/FinalizeNormalizationHandler/1.0.0"/>
+    </flow:step>
+
+    <flow:path transaction="NOT_SUPPORTED">
+        <flow:from uri="direct:NormalizeMirroredTransportDataFlowInput"/>
+        <flow:to uri="TransportCimSetupNormalizationHandler"/>
+        <flow:to uri="TransportCimNormalizeMirroredTransportDataHandler"/>
+        <flow:to uri="UpdateNormalizedDataInCimHandler"/>
+        <flow:to uri="FinalizeNormalizationHandler"/>
+    </flow:path>
+
+    <flow:capabilities>
+        <flow:requiredCapability name="MSCMIP_SERVICE_GROUP" />
+    </flow:capabilities>
+
+</flow:FlowDefinition>

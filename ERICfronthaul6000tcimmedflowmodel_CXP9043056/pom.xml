@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>fronthaul6000-transportcim-mediation-flow-model</artifactId>
+        <groupId>com.ericsson.oss.mediation.transportcim.models.flow</groupId>
+        <version>1.2.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>ERICfronthaul6000tcimmedflowmodel_CXP9043056</artifactId>
+    <name>[${project.parent.artifactId}] RPM module</name>
+    <packaging>${rpm.packaging}</packaging>
+    <description>RPM module</description>
+    <properties>
+    <publish_artifact>true</publish_artifact>
+    <com.ericsson.oss.rpm.architecture>noarch</com.ericsson.oss.rpm.architecture>
+    <media.category>model</media.category>
+    <rpm.name>${project.artifactId}</rpm.name>
+    <rpm.version>${project.version}</rpm.version>
+    <model-install-path>/var/opt/ericsson/ERICmodeldeployment/data/install</model-install-path>
+    <media.category>model</media.category>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fronthaul6000-transportcim-mediation-flow-model-jar</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.ericsson.oss.itpf.deployment</groupId>
+        <artifactId>deployment-descriptor-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>configurable-entity</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <configEntity>
+            <stereotype>MODEL_PKG</stereotype>
+            <parameters>
+              <itemType name="model-package">
+                <property name="name" defaultValue="ERICfronthaul6000tcimmedflowmodel_CXP9043056" />
+              </itemType>
+            </parameters>
+          </configEntity>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration combine-self="override">
+          <license>2021 Ericsson AB All rights reserved</license>
+          <name>${rpm.name}</name>
+          <versionProperty>${rpm.version}</versionProperty>
+          <group>ERI-NMS</group>
+          <release>2</release>
+          <vendor>Ericsson AB</vendor>
+          <summary>${project.parent.artifactId}</summary>
+          <mappings>
+            <mapping>
+              <directory>${model-install-path}</directory>
+              <filemode>754</filemode>
+              <username>mdtuser</username>
+              <groupname>mdt</groupname>
+              <configuration>false</configuration>
+              <directoryIncluded>false</directoryIncluded>
+              <recurseDirectories>true</recurseDirectories>
+              <sources>
+                <source>
+                  <location>../fronthaul6000-transportcim-mediation-flow-model-jar/target</location>
+                  <includes>
+                    <include>${project.parent.artifactId}-jar-${project.parent.version}.jar</include>
+                  </includes>
+                </source>
+              </sources>
+            </mapping>
+          </mappings>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
